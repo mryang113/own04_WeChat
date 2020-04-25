@@ -1,0 +1,72 @@
+<view class="indexContainer">
+  <!-- 主页轮播图 -->
+  <swiper class="navSwiper" indicator-dots indicator-color='ivory' indicator-active-color='#d43c33' circular>
+    <!-- wx:key 两种方式 *this 这个有局限性-->
+    <swiper-item wx:for="{{bannerList}}" wx:key="id">
+      <image src="{{item.pic}}"></image>
+    </swiper-item>
+  </swiper>
+
+  <!-- 导航区域-->
+  <view class="navContainer" hover-class="none" hover-stop-propagation="false">
+    <view class="navItem">
+      <text class="iconfont icon-meirituijian-"></text>
+      <text>每日推荐</text>
+    </view>
+    <view class="navItem">
+      <text class="iconfont icon-gedan1"></text>
+      <text>歌单</text>
+    </view>
+    <view class="navItem">
+      <text class="iconfont icon-icon-ranking"></text>
+      <text>排行榜</text>
+    </view>
+    <view class="navItem">
+      <text class="iconfont icon-diantai"></text>
+      <text>电台</text>
+    </view>
+    <view class="navItem">
+      <text class="iconfont icon-zhiboguankanliangbofangsheyingshexiangjixianxing"></text>
+      <text>直播</text>
+    </view>
+    
+  </view>
+
+  <!-- 推荐歌曲 -->
+  <view class="recommendContainer">
+    <!-- 头部-->
+    <NavHeader title="推荐歌曲" nav="为你精心推荐" />
+    <!-- 滑屏  enable-flex为true布局中flex才有效 --> 
+    <scroll-view class="navScroll" enable-flex scroll-x>
+      <!-- wx:key 两种方式 *this 这个有局限性-->
+      <view class="scrollItem" wx:for="{{recommendList}}" wx:key="id">
+        <image src="{{item.picUrl}}" />
+        <text>{{item.name}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 排行榜 -->
+  <view class="topList">
+    <!-- 头部 -->
+    <NavHeader title="排行榜" nav="热歌风向标"/>
+    <!-- 内容区 next-margin是第二个会在第一个里面显示一部分-->
+    <swiper class="topListSwiper" next-margin="50rpx">
+      <swiper-item class="swiperItem" wx:for="{{topList}}" wx:key="name">
+        <view class="swiperContent">
+          <text class="title">{{item.name}}</text>
+          <view class="musicContent" wx:for="{{item.tracks}}" wx:for-item="musicItem" wx:for-index="musicIndex" wx:key="name">
+            <image class="musicImg" src="{{musicItem.al.picUrl}}" />
+            <text class="count">{{musicIndex + 1}}</text>
+            <text class="musicName">{{musicItem.name}}</text>
+          </view>
+        </view>
+      </swiper-item>
+    </swiper>
+
+
+  </view>
+  
+
+
+</view>

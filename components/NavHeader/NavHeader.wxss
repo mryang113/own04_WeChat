@@ -1,0 +1,22 @@
+ .header{
+  margin-bottom: 20rpx;
+}
+ .header .title{
+  font-size: 26rpx;
+  color: #666;
+}
+ .header .navContent{
+  height: 50rpx;
+  line-height: 50rpx;
+}
+ .header .navContent .nav{
+  font-size: 30rpx;
+  color: #000;
+}
+ .header .navContent .more{
+  float: right;
+  border: 1rpx solid #333;
+  border-radius: 20rpx;
+  font-size: 20rpx;
+  padding: 0 20rpx;
+}
