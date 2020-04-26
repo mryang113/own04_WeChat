@@ -45,7 +45,7 @@ Page({
       })
 
       // 2. 跳转至个人中心页
-      wx.redirectTo({
+      wx.reLaunch({
         url:'/pages/personal/personal'
       })
 
