@@ -8,15 +8,36 @@ Page({
   data: {
     coverTransform: 'translateY(0px)',
     coverTransition: '',
-    userInfo: {},
-    recentPlayList: {}, // 最近播放记录
+    userInfo: {}, //用于数据回显,存放登录时用户信息
+    recentPlayList: [], // 最近播放记录
   },
 
   // 生命周期函数--监听页面加载
   onLoad: async function (options) {
     // 读取本地是否有登录缓存数据
     let userInfo = wx.getStorageSync('userInfo');
-    
+    if(userInfo){
+      this.setData({
+        userInfo: JSON.parse(userInfo)
+      })
+
+      // 获取当前用户的播放记录
+      let recentPlayListData = await request('/user/record',{uid: JSON.parse(userInfo).userId, type:0})
+      this.setData({
+        recentPlayList: recentPlayListData.allData
+      })
+    }
+  },
+
+  // 跳转至登录界面
+  toLogin(){
+    // 判断是否登录
+    if(!this.data.userInfo.nickname){
+      // 路由跳转的一种形式-->关闭所有页面，打开到应用内的某个页面
+      wx.reLaunch({
+        url: '/pages/login/login'
+      })
+    }
   },
 
   // 点击拖拽3件套  点击-->移动-->抬手

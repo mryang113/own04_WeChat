@@ -3,14 +3,17 @@
   <!-- 用户头部 -->
   <view class="user-section">
     <image class="bg" src="/static/images/personal/bgImg2.jpg"></image>
-    <view class="user-info-box" >
+    <!-- 头像及用户名显示部分 -->
+    <view class="user-info-box" bindtap="toLogin" >
       <view class="portrait-box">
-        <image class="portrait" src='/static/images/personal/missing-face.png'></image>
+        <image class="portrait" src='{{userInfo.avatarUrl ? userInfo.avatarUrl : "/static/images/personal/missing-face.png"}}'>
+        </image>
       </view>
       <view class="info-box">
-        <text class="username">游客</text>
+        <text class="username">{{userInfo.nickname ? userInfo.nickname : '游客'}}</text>
       </view>
     </view>
+    <!-- 硅谷会员卡 -->
     <view class="vip-card-box">
       <image class="card-bg" src="/static/images/personal/vip-card-bg.png" mode=""></image>
       <view class="b-btn">
@@ -60,10 +63,10 @@
     <view class="personalContent">
       <view class="recentPlayContainer">
         <text class="title">最近播放</text>
-        <view wx:if="{{!userInfo.profile}}">暂无</view>
+        <view wx:if="{{!userInfo.nickname || !recentPlayList.length}}">暂无</view>
         <scroll-view wx:else class="scrollView" enable-flex scroll-x="true">
-          <view class="recentPlay">
-            <image src="/static/images/nvsheng.jpg"></image>
+          <view class="recentPlay" wx:for="{{recentPlayList}}" wx:key="song.id">
+            <image src="{{item.song.al.picUrl}}"></image>
           </view>
         </scroll-view>
       </view>
