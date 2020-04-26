@@ -1,2 +1,29 @@
-<!--pages/video/video.wxml-->
-<text>pages/video/video.wxml</text>
+<view class="videoContainer">
+  <!-- 头部 -->
+  <view class="header">
+    <image src="/static/images/video/video.jpg" />
+    <view class="search">
+      <input type="text" placeholder="光辉岁月" placeholder-class="placeholder"/>
+    </view>
+    <image src="/static/images/video/video.jpg" />
+  </view>
+
+  <!-- 导航区域 -->
+  <scroll-view class="videoNav" enable-flex scroll-x>
+    <view class="navItem" wx:for="{{videoGroupList}}" wx:key="id">
+      <view class="navItemContent {{item.id === navId ? 'active' : 'xxx'}}" 
+        bindtap="changeNavId" id="{{item.id}}"
+      >
+        {{item.name}}
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 视频列表 -->
+  <scroll-view>
+    <view class="videoItem" wx:for="{{videoList}}" wx:key="data.vid">
+      <video src="{{item.data.urlInfo.url}}"></video>
+    </view>
+  </scroll-view>
+
+</view>

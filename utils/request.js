@@ -7,11 +7,24 @@ export default (url,data={},method='GET') => {
       url: config.host + url,
       data,
       method,
-      header: {'content-type':'application/json'},
+      header: { // 请求头携带 cookie ,必须为字符串,两种方法都可以
+        // 这里测试时有个bug,已登录状态下,再次登录,会报错,会登录不进去,
+        // cookie: JSON.parse(wx.getStorageSync('cookies')).toString()
+        cookie: `${JSON.parse(wx.getStorageSync('cookies'))}`
+      },
       // dataType: 'json',
       // responseType: 'text',
       success: (result)=>{
-        // console.log(result);
+        // console.log('result:', result);
+
+        // login请求的时候需要获取用户cookies， 存入至storage
+        if(data.isLogin){ // 是否为登录请求
+          wx.setStorage({
+            key: 'cookies',
+            data: JSON.stringify(result.cookies)
+          })
+        }
+
         resolve(result.data) //  修改promise的状态为成功状态
       },
       fail: (err)=>{
@@ -20,11 +33,6 @@ export default (url,data={},method='GET') => {
     });
   })
 }
-
-
-
-
-
 
 
 

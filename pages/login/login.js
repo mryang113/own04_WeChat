@@ -28,9 +28,9 @@ Page({
       })
       return
     }else{
-      // 3. 后端验证
-      let result = await request('/login/cellphone',{phone, password});
-      console.log(result);
+      // 3. 后端验证  isLogin: true 后加的为了video视频也访问需要 cookies,用于request封装里面判别是否为login请求
+      let result = await request('/login/cellphone',{phone, password, isLogin:true});
+      // console.log(result);
       if(result.code === 200){
         //登录成功
         wx.showToast({
