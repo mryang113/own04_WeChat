@@ -26,9 +26,12 @@
 
   <!-- 视频列表 -->
   <!-- 一些组件配置,下拉刷新 / 刷新前钩子 / 是否触发刷新 / 纵向滑屏 -->
-  <scroll-view class="videoList" refresher-enabled
+  <scroll-view 
+    class="videoList" 
+    refresher-enabled
     bindrefresherrefresh = "handleRefresher"
     refresher-triggered = "{{triggered}}"
+    bindscrolltolower = "handleScrollLower"
     scroll-y
   >
     <view class="videoItem" wx:for="{{videoList}}" wx:key="data.vid">
@@ -56,5 +59,6 @@
 
     </view>
   </scroll-view>
+  <!--<view>测试。。。</view>-->
 
 </view>
