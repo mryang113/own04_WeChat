@@ -35,7 +35,12 @@
     scroll-y
   >
     <view class="videoItem" wx:for="{{videoList}}" wx:key="data.vid">
-      <video src="{{item.data.urlInfo.url}}"></video>
+      <video 
+        src="{{item.data.urlInfo.url}}"
+        poster="{{item.data.coverUrl}}"
+        id="{{item.data.vid}}"
+        bindplay="handlePlay"
+      ></video>
       <!-- 视频下的标题 -->
       <view class="content">{{item.data.title}}</view>
       <!-- 视频下的一些文本 -->

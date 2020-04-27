@@ -1739,9 +1739,25 @@ Page({
       this.setData({
         videoList
       })
-
     }, 2000);
+  },
 
+  // 处理同时播放多个问题
+  handlePlay(e){
+    // console.log(e,"play播放");
+    // 找到上一个播放video的上下文对象videoContext 让他stop()
+    // 当本次点击的视频id和上一次点击的视频id 不是同一个id的时候,才走这的逻辑
+    this.vid !== e.currentTarget.id && this.videoContext && this.videoContext.stop()
+    // 上面是 短路& 只要前面一项为假,后面都不看,想执行后面的逻辑,必须前面的都为真
+    // 上面那段代码相当于这段if代码
+    // if(event.currentTarget.id !== this.vid ){
+    //   if(this.videoContext){ // 判断是否有上下文对象，证明之前播放过视频
+    //     this.videoContext.stop()
+    //   }
+    // }
+
+    this.vid = e.currentTarget.id;
+    this.videoContext = wx.createVideoContext(this.vid); //文档video的api有例子,创造一个上下文实例出来
 
   },
 
