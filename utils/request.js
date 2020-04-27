@@ -9,8 +9,8 @@ export default (url,data={},method='GET') => {
       method,
       header: { // 请求头携带 cookie ,必须为字符串,两种方法都可以
         // 这里测试时有个bug,已登录状态下,再次登录,会报错,会登录不进去,
-        // cookie: JSON.parse(wx.getStorageSync('cookies')).toString()
-        cookie: `${JSON.parse(wx.getStorageSync('cookies'))}`
+        // cookie: JSON.parse(wx.getStorageSync('cookies') || "[]").toString()
+        cookie: `${JSON.parse(wx.getStorageSync('cookies') || "[]")}` //第一次上来没有,没有就给个空的json数据格式
       },
       // dataType: 'json',
       // responseType: 'text',
