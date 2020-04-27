@@ -7,6 +7,7 @@ Page({
     videoGroupList: [], // 导航列表
     navId: '', // 视频标签id标识
     videoList: [], // 视频列表数据
+    triggered: false // 标识下拉刷新是否被触发
   },
 
   // 生命周期函数--监听页面加载
@@ -67,10 +68,17 @@ Page({
     // console.log(videoListData);
     // 更新至data中的videoList
     this.setData({
-      videoList: videoListData.datas
+      videoList: videoListData.datas,
+      triggered: false,  // 关闭下拉刷新
     })
   },
 
+  // 下拉刷新的回调
+  handleRefresher(){
+    console.log('下拉刷新时被触发');
+    // 发送请求，更新数据
+    this.getVideoList(this.data.navId);
+  },
 
   // 生命周期函数--监听页面初次渲染完成
   onReady: function () {
@@ -116,6 +124,14 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
+    //就是自定义button转发分享三个点... 那个按钮,的一些样式设置
+    console.log('用户转发分享'); 
+    // 这些操作如果在真机上操作要去小程序开发权限里设置 添加开发人员...
+    return {
+      title: "这是我自定义的转发内容",
+      path: '/pages/video/video',
+      imageUrl: '/static/images/02.jpg' //图片路径一定要绝对路径
+    }
 
   }
 })
