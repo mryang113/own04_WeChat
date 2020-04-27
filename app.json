@@ -1,5 +1,7 @@
 {
   "pages": [
+    "pages/song/song",
+    "pages/recommend/recommend",
     "pages/video/video",
     "pages/login/login",
     "pages/personal/personal",
@@ -36,5 +38,4 @@
       }
     ]
   }
-
 }
