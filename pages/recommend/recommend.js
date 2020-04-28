@@ -38,6 +38,16 @@ Page({
     })
   },
 
+  // 点击音乐列表的回调
+  toSong(e){
+    // console.log(e);
+    let song = e.currentTarget.dataset.song
+    // 路由传参： query的形式 ----> url?a=xxx&b=yyy
+    wx.navigateTo({
+      url: '/pages/song/song?id=' + song.id
+    })
+  },
+
   // 生命周期函数--监听页面初次渲染完成
   onReady: function () {
 

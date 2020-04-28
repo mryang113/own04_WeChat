@@ -1,10 +1,19 @@
 <view class="songContainer">
-  <view class="class">陈奕迅</view>
+  <view class="class">{{song.name}}</view>
   <view class="circle"></view>
   <image class="needle {{isPlay?'needleRotate':''}}" src="/static/images/song/needle.png" />
   <view class="discContainer {{isPlay?'discRotate':''}}">
     <image class="disc" src="/static/images/song/disc.png" />
     <image class="musicImg" src="/static/images/02.jpg" />
+  </view>
+
+  <!-- 底部播放选项区域 -->
+  <view class="musicControl">
+    <text class="iconfont icon-iconsMusicyemianbofangmoshiShuffle" ></text>
+    <text class="iconfont icon-shangyishou" bindtap='switchSong' id="pre"></text>
+    <text class="iconfont {{isPlay?'icon-zanting': 'icon-bofang'}} big" bindtap="musicPlay"></text>
+    <text class="iconfont icon-next" bindtap='switchSong' id="next"></text>
+    <text class="iconfont icon-iconsMusicyemianbofangmoshiPlayList"></text>
   </view>
 
 </view>
