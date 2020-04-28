@@ -1,12 +1,12 @@
-
+import PubSub from 'pubsub-js'
 import request from '../../utils/request'
-
 
 Page({
   data: {
     day: '',
     month:'',
-    recommendList: [] //// 推荐数据列表
+    recommendList: [], //// 推荐数据列表
+    index: 0,// 记录播放歌曲的下标 消息订阅时候加的
   },
 
   // 生命周期函数--监听页面加载
@@ -36,12 +36,36 @@ Page({
     this.setData({
       recommendList: recommendListData.recommend
     })
+
+    // PubSub-01-sub 订阅song页面发布的消息(对应事件名及注释标号)
+    PubSub.subscribe('switchType',(msg,type) => {
+      // 第一个参数其实没啥用,就是订阅与发布的事件名字
+      // console.log(msg,data,'recommend页面');
+      let {recommendList,index} = this.data;
+      let musicId;
+      if(type === 'pre'){ //点击的是上一首
+        index -= 1;
+        musicId = recommendList[index].id;
+      }else{ //点击的是下一首
+        index += 1;
+        musicId = recommendList[index].id;
+      }
+      // 实时更新当前播放音乐的下标记录
+      this.setData({index})
+
+      //PubSub-02-pub 此时此刻,不再发布消息等待何时?(就是订阅到song的消息,处理完后,再把这些song所需数据发布给他)
+      PubSub.publish('musicId',musicId)
+
+    })
   },
 
   // 点击音乐列表的回调
   toSong(e){
     // console.log(e);
-    let song = e.currentTarget.dataset.song
+    let {song,index} = e.currentTarget.dataset
+    this.setData({
+      index // 点击跳转的时候,把这个index也记录到,后来Pubsub用的
+    })
     // 路由传参： query的形式 ----> url?a=xxx&b=yyy
     wx.navigateTo({
       url: '/pages/song/song?id=' + song.id

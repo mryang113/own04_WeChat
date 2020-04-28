@@ -1,3 +1,5 @@
+//引入第三方库,首先要点击详情,把"使用npm模块勾上"",然后去 开发工具 ---> 工具 ---> 构建npm才不会报错
+import PubSub from 'pubsub-js' 
 import request from '../../utils/request'
 
 let appInstance = getApp() //生成全局app实例,这里有app的全局状态,文档api
@@ -65,6 +67,21 @@ Page({
       appInstance.globalData.isMusicPlay = false; //全局也同步修改
     });
 
+    // PubSub-02-sub 再次订阅从recommend页面回来的数据
+    PubSub.subscribe('musicId',async (msg,musicId) => {
+      // console.log(msg,musicId,'song页面的数据是从recommend页面发送过的###');
+
+      // 通过音乐id获取音乐的数据
+      let songData = await request(`/song/detail?ids=${musicId}`)
+      this.setData({
+        song: songData.songs[0],
+        musicId
+      })
+
+       // 在点击切换的时候让音乐自动播放所切换到的歌曲, 注意点： 此处不应该传musicLink，否则播放的是上一首音乐,
+      this.musicControl(true,musicId); //应为此时传的话,看看函数逻辑,这个链接走的是上一首的,如果不传是undefined,取反就会重新请求
+    })
+
   },
 
   // 播放音乐的回调
@@ -108,6 +125,22 @@ Page({
     }else{ // 暂停
       this.backgroundAudioManager.pause();
     }
+  },
+
+  //上一首和下一首的切换逻辑
+  switchMusic(e){
+    let type = e.currentTarget.id //id是标签传过来的id
+    // console.log(type);
+    // 先停掉当前正在播放的音乐，然后切换下一首 ,更好的用户体验
+    this.backgroundAudioManager.stop();
+
+    // 执行切换时的回调
+    this.handleSwitch(type);
+  },
+  // 切换歌曲的功能函数
+  handleSwitch(type){
+    // PubSub-01-pub 这里第一次用到页面进行通信,这里先是发布数据(就是点击的是上一首还是下一首)-->去recommend页面onLoad接受
+    PubSub.publish('switchType',type) // 发布的事件名,及data
   },
 
 

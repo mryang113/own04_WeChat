@@ -15,7 +15,7 @@
       <text class="changeMore">多选</text>
     </view>
 
-    <!-- 音乐列表滑屏区 -->
+    <!-- 音乐列表滑屏区   data-index后加的-->
     <scroll-view class="scrollView" scroll-y>
       <view 
         class="recommendItem" 
@@ -23,6 +23,7 @@
         wx:key="id"
         bindtap="toSong"
         data-song="{{item}}"
+        data-index="{{index}}"
       >
         <image src="{{item.album.picUrl}}" />
         <view class="musicContent">
