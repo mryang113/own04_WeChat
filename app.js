@@ -1,8 +1,14 @@
-App({
 
-  /**
-   * 当小程序初始化完成时，会触发 onLaunch（全局只触发一次）
-   */
+// 注册小程序应用
+App({
+  // 全局数据
+  globalData:{
+    isMusicPlay: false,// 音乐是否在播放
+    musicIda: null, // 音乐id
+  },
+
+  
+  //当小程序初始化完成时，会触发 onLaunch（全局只触发一次）
   onLaunch: function () {
     
   },

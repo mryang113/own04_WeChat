@@ -1,0 +1,22 @@
+{
+  "name": "02a-project-cloudmusic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mryang113/own04_WeChat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mryang113/own04_WeChat/issues"
+  },
+  "homepage": "https://github.com/mryang113/own04_WeChat#readme",
+  "dependencies": {
+    "pubsub-js": "^1.8.0"
+  }
+}
