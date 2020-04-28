@@ -5,6 +5,7 @@ Page({
     isPlay:false, //标识音乐是否在播放
     song: {}, // 音乐数据
     musicId: '', // 音乐的id
+    musicLink: '', // 音乐播放链接
   },
 
   // 生命周期函数--监听页面加载
@@ -21,6 +22,11 @@ Page({
       song: songData.songs[0],
       musicId
     })
+
+    // 动态修改窗口标题 参考文档api
+    wx.setNavigationBarTitle({
+      title: this.data.song.name
+    })
   },
 
   // 播放音乐的回调
@@ -32,15 +38,33 @@ Page({
     })
 
     // 播放/暂停音乐
-    this.musicControl(isPlay);
+    let {musicId,musicLink} = this.data;
+    this.musicControl(isPlay,musicId,musicLink);
   },
 
-  musicControl(isPlay){
+  // 封装控制音乐播放的功能函数
+  async musicControl(isPlay,musicId,musicLink){
     // 播放
     if(isPlay){
+      // 判断之前是否有音乐链接,就是不用再暂停后再次播放的时候,再次重复发请求
+      if(!musicLink){
+        // 通过音乐musicId获取音乐播放链接
+        let musicLinkData = await request(`/song/url?id=${musicId}`)
+        musicLink = musicLinkData.data[0].url;
+        console.log(musicLinkData);
+        // 更新data中的音乐链接musicLink
+        this.setData({
+          musicLink
+        })
+      }
+      // 生成音乐播放的实例 ,参考文档api 
+      this.backgroundAudioManager = wx.getBackgroundAudioManager()
+      this.backgroundAudioManager.src = musicLink
+      this.backgroundAudioManager.title = this.data.song.name;
 
+      //r如果想在小程序隐藏继续播放歌曲就要在app.json中设置 "requiredBackgroundModes":["audio"]
     }else{ // 暂停
-
+      this.backgroundAudioManager.pause();
     }
   },
 

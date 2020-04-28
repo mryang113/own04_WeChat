@@ -1,10 +1,10 @@
 <view class="songContainer">
-  <view class="class">{{song.name}}</view>
+  <view class="class">{{song.ar[0].name}}</view>
   <view class="circle"></view>
   <image class="needle {{isPlay?'needleRotate':''}}" src="/static/images/song/needle.png" />
   <view class="discContainer {{isPlay?'discRotate':''}}">
     <image class="disc" src="/static/images/song/disc.png" />
-    <image class="musicImg" src="/static/images/02.jpg" />
+    <image class="musicImg" src="{{song.al.picUrl}}" />
   </view>
 
   <!-- 底部播放选项区域 -->
