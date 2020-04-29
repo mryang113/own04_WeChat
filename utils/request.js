@@ -5,6 +5,7 @@ export default (url,data={},method='GET') => {
   return new Promise((resolve,reject) => {
     wx.request({
       url: config.host + url,
+      // url: config.phoneHost + url,
       data,
       method,
       header: { // 请求头携带 cookie ,必须为字符串,两种方法都可以

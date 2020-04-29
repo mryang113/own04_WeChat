@@ -44,9 +44,11 @@ Page({
       let {recommendList,index} = this.data;
       let musicId;
       if(type === 'pre'){ //点击的是上一首
+        (index === 0) && (index = recommendList.length) // 小程序对于&& 左右两边的赋值语句,语法会有冲突,要加个()包起来
         index -= 1;
         musicId = recommendList[index].id;
       }else{ //点击的是下一首
+        (index === recommendList.length -1) && (index = -1)
         index += 1;
         musicId = recommendList[index].id;
       }

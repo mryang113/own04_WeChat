@@ -12,6 +12,7 @@ Page({
     song: {}, // 音乐数据
     musicId: '', // 音乐的id
     musicLink: '', // 音乐播放链接
+    isMusicSwitch: false, // 6-1标识音乐是否在切换, 默认是未切换状态
   },
 
   // 生命周期函数--监听页面加载
@@ -78,6 +79,11 @@ Page({
         musicId
       })
 
+      // 再次 动态修改窗口标题 参考文档api
+      wx.setNavigationBarTitle({
+        title: this.data.song.name
+      })
+
        // 在点击切换的时候让音乐自动播放所切换到的歌曲, 注意点： 此处不应该传musicLink，否则播放的是上一首音乐,
       this.musicControl(true,musicId); //应为此时传的话,看看函数逻辑,这个链接走的是上一首的,如果不传是undefined,取反就会重新请求
     })
@@ -118,6 +124,9 @@ Page({
       this.backgroundAudioManager.src = musicLink
       this.backgroundAudioManager.title = this.data.song.name;
 
+      //6-4 重置切换歌状态
+      this.setData({isMusicSwitch: false})
+
       // 全局声明播放音乐的musicId
       appInstance.globalData.musicId = musicId;
 
@@ -129,6 +138,10 @@ Page({
 
   //上一首和下一首的切换逻辑
   switchMusic(e){
+    if(this.data.isMusicSwitch){ //6-2
+      return //防止用户连续点击切歌按钮,等到这一首请求成功之后才可以再次点击
+    }
+    this.setData({isMusicSwitch: true}) //6-3
     let type = e.currentTarget.id //id是标签传过来的id
     // console.log(type);
     // 先停掉当前正在播放的音乐，然后切换下一首 ,更好的用户体验
