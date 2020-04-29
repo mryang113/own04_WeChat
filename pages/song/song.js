@@ -1,5 +1,6 @@
 //引入第三方库,首先要点击详情,把"使用npm模块勾上"",然后去 开发工具 ---> 工具 ---> 构建npm才不会报错
-import PubSub from 'pubsub-js' 
+import PubSub from 'pubsub-js'
+import moment from 'moment' 
 import request from '../../utils/request'
 
 let appInstance = getApp() //生成全局app实例,这里有app的全局状态,文档api
@@ -13,6 +14,10 @@ Page({
     musicId: '', // 音乐的id
     musicLink: '', // 音乐播放链接
     isMusicSwitch: false, // 6-1标识音乐是否在切换, 默认是未切换状态
+    currentWidth: 0, //7-1实时进度条的宽度
+    durationTime:0, //7-1 音乐总时长
+    durationTimeFormat:"00:00", //7-1 格式化以后的总时长
+    currentTimeFormat: "00:00", //7-1 实时播放时长的格式化数据
   },
 
   // 生命周期函数--监听页面加载
@@ -24,10 +29,17 @@ Page({
 
     let musicId = options.id;
     // 通过音乐id获取音乐的数据
-    let songData = await request(`/song/detail?ids=${musicId}`)
+    let songData = await request(`/song/detail?ids=${musicId}`);
+    //7-2 收集音乐总时长
+    let durationTime = songData.songs[0].dt; //数据回来是毫秒单位 ,例:326000
+    //7-2 对时间进行格式化, moment转换时间格式的时候，要求传入ms时间
+    let durationTimeFormat = moment(durationTime).format('mm:ss')
+
     this.setData({
       song: songData.songs[0],
-      musicId
+      musicId,
+      durationTime, //7-2
+      durationTimeFormat, //7-2
     })
 
     // 动态修改窗口标题 参考文档api
@@ -68,15 +80,47 @@ Page({
       appInstance.globalData.isMusicPlay = false; //全局也同步修改
     });
 
+    // 8-1 补逻辑 监听 当歌曲播放完后让他自动播放下一首
+    this.backgroundAudioManager.onEnded(() => {
+      // 停止当前音乐播放， 自动播放下一首音乐
+      this.backgroundAudioManager.stop();
+      this.handleSwitch('next');
+    })
+
+    //7-3 监听 背景音频播放进度更新事件，只有小程序在前台时会回调。
+    this.backgroundAudioManager.onTimeUpdate(() => {
+      // console.log('音乐在播放---');
+      // 获取实时的时间，格式化 backgroundAudioManager.currentTime 单位是s 在格式化时要转成毫秒
+      // console.log(this.backgroundAudioManager.currentTime);
+      let currentTimeFormat = moment(this.backgroundAudioManager.currentTime * 1000).format('mm:ss');
+
+      // 播放进度条长度计算公式： 播放时长 / 总时长 = 进度条的长度 / 进度条的总共长度(下面这俩实例的属性单位都是s)
+      let currentWidth = this.backgroundAudioManager.currentTime / this.backgroundAudioManager.duration * 450;
+      this.setData({
+        currentTimeFormat,
+        currentWidth
+      })
+    })
+
+
+
     // PubSub-02-sub 再次订阅从recommend页面回来的数据
     PubSub.subscribe('musicId',async (msg,musicId) => {
       // console.log(msg,musicId,'song页面的数据是从recommend页面发送过的###');
 
       // 通过音乐id获取音乐的数据
-      let songData = await request(`/song/detail?ids=${musicId}`)
+      let songData = await request(`/song/detail?ids=${musicId}`);
+
+      //7-4 和 7-2 逻辑一样
+      let durationTime = songData.songs[0].dt; //数据回来是毫秒单位 ,例:326000
+      //7-4 对时间进行格式化, moment转换时间格式的时候，要求传入ms时间
+      let durationTimeFormat = moment(durationTime).format('mm:ss')
+
       this.setData({
         song: songData.songs[0],
-        musicId
+        musicId,
+        durationTime,
+        durationTimeFormat
       })
 
       // 再次 动态修改窗口标题 参考文档api
