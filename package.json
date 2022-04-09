@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/mryang113/own04_WeChat#readme",
   "dependencies": {
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "pubsub-js": "^1.8.0"
   }
 }
